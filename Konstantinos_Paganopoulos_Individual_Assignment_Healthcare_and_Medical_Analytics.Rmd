@@ -1,0 +1,120 @@
+---
+title: "Healthcare and Medical Analytics"
+author: "Konstantinos Paganopoulos"
+subtitle: Individual Assignment
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+First, we load all the libraries that we need.
+
+```{r include = FALSE}
+# load the necessary libraries
+library(tidyverse)
+```
+
+After that, we load the data that we need for our model:
+
+```{r}
+data_model = read.csv("data_model.csv")
+head(data_model)
+```
+
+Let's now build several logistic regression models to examine how each factor affects the relationship between gender and seasonal allergies.
+
+First, we start by examining the relationship between gender and seasonal allergies:
+
+```{r}
+model <- glm(allergies ~ gender_Male, family = binomial(link = 'logit'), data_model)
+summary(model)
+```
+
+We continue by examining how stress affects the relationship between gender and seasonal allergies:
+
+```{r}
+model <- glm(allergies ~ gender_Male + stress_Yes, family = binomial(link = 'logit'), 
+             data_model)
+summary(model)
+```
+
+We continue by examining how being arrested affects the relationship between gender and seasonal allergies:
+
+```{r}
+model <- glm(allergies ~ gender_Male + arrested_Yes, family = binomial(link = 'logit'), 
+             data_model)
+summary(model)
+```
+
+We continue by examining how being raped affects the relationship between gender and seasonal allergies:
+
+```{r}
+model <- glm(allergies ~ gender_Male + rape_Yes, family = binomial(link = 'logit'), 
+             data_model)
+summary(model)
+```
+
+We continue by examining how normal nutrition affects the relationship between gender and seasonal allergies:
+
+```{r}
+model <- glm(allergies ~ gender_Male + nutrition_normal, 
+             family = binomial(link = 'logit'),data_model)
+summary(model)
+```
+
+We continue by examining how unhealthy nutrition affects the relationship between gender and seasonal allergies:
+
+```{r}
+model <- glm(allergies ~ gender_Male + nutrition_unhealthy, 
+             family = binomial(link = 'logit'), data_model)
+summary(model)
+```
+
+We continue by examining how being poor affects the relationship between gender and seasonal allergies:
+
+```{r}
+model <- glm(allergies ~ gender_Male + assets_poor, family = binomial(link = 'logit'), 
+             data_model)
+summary(model)
+```
+
+We continue by examining how being wealthy affects the relationship between gender and seasonal allergies:
+
+```{r}
+model <- glm(allergies ~ gender_Male + assets_wealthy, 
+             family = binomial(link = 'logit'), data_model)
+summary(model)
+```
+
+We continue by examining how black ethnicity affects the relationship between gender and seasonal allergies:
+
+```{r}
+model <- glm(allergies ~ gender_Male + ethnicity_black, 
+             family = binomial(link = 'logit'), data_model)
+summary(model)
+```
+
+We continue by examining how indian ethnicity affects the relationship between gender and seasonal allergies:
+
+```{r}
+model <- glm(allergies ~ gender_Male + ethnicity_indian, 
+             family = binomial(link = 'logit'), data_model)
+summary(model)
+```
+
+Now we combine all of the above factors and check how all of them affect the relationship between gender and seasonal allergies:
+
+```{r}
+model <- glm(allergies ~ gender_Male + stress_Yes + arrested_Yes + rape_Yes 
+             + nutrition_normal+ nutrition_unhealthy + assets_poor 
+             + assets_wealthy + ethnicity_black + ethnicity_indian 
+             + ethnicity_white, family = binomial(link = 'logit'), data_model)
+summary(model)
+```
+
+From the above results, we can clearly see that the gender of someone, the fact that she/he has been raped or not, as well as if the respondent has stress, are the three most significant factors that determine the frequency of his/her seasonal allergies occurence. The later was expected, since women are more likely to be abused and raped, and because according to our literature review the proportion of women feeling stressed is higher than that of men.
+
+Moreover, indian ethnicity seems to play a role in determining the frequency of seasonal allergies. As for the variable arrested or not, we could say that is quite significant, probably because it is associated with gender as men are more likely to be arrested due to being more violent.
+
+Other socioeconomic factors, such as total assets that somebody owns, black or white ethnicity, or nutrition, even if that is unhealthy, don't seem to affect at all the frequency of seasonal allergies between the two genders.
